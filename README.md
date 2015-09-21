@@ -41,6 +41,7 @@ apt-get install nfs-common
 # 在nfs 节点上安装nfs server
 ```bash
 apt-get install nfs-kernel-server
+chown -R cinder:cinder /volume
 cat /etc/exports 
 # /etc/exports: the access control list for filesystems which may be exported
 #               to NFS clients.  See exports(5).
