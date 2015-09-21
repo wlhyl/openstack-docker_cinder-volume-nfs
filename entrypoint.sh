@@ -100,7 +100,7 @@ CONNECTION=mysql://cinder:$CINDER_DBPASS@$CINDER_DB/cinder
     $CRUDINI --set /etc/cinder/cinder.conf $VOLUME_BACKEND_NAME nfs_sparsed_volumes True
 
     echo ${MY_IP}:/volume > /etc/cinder/nfsshares
-    chown root:cinder /etc/cinder/nfsshares
-    chmod 0640 /etc/cinder/nfsshares
+    # chown root:cinder /etc/cinder/nfsshares
+    # chmod 0640 /etc/cinder/nfsshares
 
 /usr/bin/supervisord -n
