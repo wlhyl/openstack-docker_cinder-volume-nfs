@@ -51,12 +51,14 @@ if [ -z "$GLANCE_HOST" ];then
   exit 1
 fi
 
+if [ -z "$VOLUME_BACKEND_NAME" ];then
+  echo "error: VOLUME_BACKEND_NAME not set."
+  exit 1
+fi
+
 CRUDINI='/usr/bin/crudini'
 
 CONNECTION=mysql://cinder:$CINDER_DBPASS@$CINDER_DB/cinder
-
-if [ ! -f /etc/cinder/.complete ];then
-    cp -rp /cinder/* /etc/cinder
 
     $CRUDINI --set /etc/cinder/cinder.conf database connection $CONNECTION
 
@@ -84,21 +86,21 @@ if [ ! -f /etc/cinder/.complete ];then
     $CRUDINI --set /etc/cinder/cinder.conf oslo_concurrency lock_path /var/lock/cinder
 
     # 设置volume
-    # $CRUDINI --set /etc/cinder/cinder.conf DEFAULT enabled_backends
+    $CRUDINI --set /etc/cinder/cinder.conf DEFAULT enabled_backends $VOLUME_BACKEND_NAME
     $CRUDINI --set /etc/cinder/cinder.conf DEFAULT glance_host $GLANCE_HOST
     $CRUDINI --set /etc/cinder/cinder.conf DEFAULT glance_api_version 2 # configuring multiple cinder back ends
     
     # 设置 nfs
-    $CRUDINI --set /etc/cinder/cinder.conf DEFAULT volume_driver cinder.volume.drivers.nfs.NfsDriver
-    $CRUDINI --set /etc/cinder/cinder.conf DEFAULT nfs_shares_config /etc/cinder/nfsshares
-    $CRUDINI --set /etc/cinder/cinder.conf DEFAULT nfs_sparsed_volumes True
+    $CRUDINI --set /etc/cinder/cinder.conf $VOLUME_BACKEND_NAME nfs_mount_attempts 3
+    $CRUDINI --set /etc/cinder/cinder.conf $VOLUME_BACKEND_NAME nfs_oversub_ratio 3.0
+    $CRUDINI --set /etc/cinder/cinder.conf $VOLUME_BACKEND_NAME nfs_used_ratio 0.95
+    $CRUDINI --set /etc/cinder/cinder.conf $VOLUME_BACKEND_NAME volume_backend_name $VOLUME_BACKEND_NAME
+    $CRUDINI --set /etc/cinder/cinder.conf $VOLUME_BACKEND_NAME volume_driver cinder.volume.drivers.nfs.NfsDriver
+    $CRUDINI --set /etc/cinder/cinder.conf $VOLUME_BACKEND_NAME nfs_shares_config /etc/cinder/nfsshares
+    $CRUDINI --set /etc/cinder/cinder.conf $VOLUME_BACKEND_NAME nfs_sparsed_volumes True
 
-    touch /etc/cinder/nfsshares
+    echo ${MY_IP}:/volume > /etc/cinder/nfsshares
     chown root:cinder /etc/cinder/nfsshares
-
-    touch /etc/cinder/.complete
-fi
-
-chown -R cinder:cinder /var/log/cinder/
+    chmod 0640 /etc/cinder/nfsshares
 
 /usr/bin/supervisord -n
