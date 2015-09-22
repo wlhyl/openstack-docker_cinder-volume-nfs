@@ -98,6 +98,8 @@ CONNECTION=mysql://cinder:$CINDER_DBPASS@$CINDER_DB/cinder
     $CRUDINI --set /etc/cinder/cinder.conf $VOLUME_BACKEND_NAME volume_driver cinder.volume.drivers.nfs.NfsDriver
     $CRUDINI --set /etc/cinder/cinder.conf $VOLUME_BACKEND_NAME nfs_shares_config /etc/cinder/nfsshares
     $CRUDINI --set /etc/cinder/cinder.conf $VOLUME_BACKEND_NAME nfs_sparsed_volumes True
+    # cinder run_as_root = True
+    $CRUDINI --set /etc/cinder/cinder.conf $VOLUME_BACKEND_NAME nas_secure_file_operations false
 
     echo ${MY_IP}:/volume > /etc/cinder/nfsshares
     # chown root:cinder /etc/cinder/nfsshares
