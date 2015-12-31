@@ -56,9 +56,18 @@ if [ -z "$VOLUME_BACKEND_NAME" ];then
   exit 1
 fi
 
+if [ -z "$NFS_SERVER" ];then
+  echo "error: NFS_SERVER not set."
+  exit 1
+fi
+
 CRUDINI='/usr/bin/crudini'
 
 CONNECTION=mysql://cinder:$CINDER_DBPASS@$CINDER_DB/cinder
+
+if [ ! -f /etc/cinder/.complete ];then
+
+    cp -rp /cinder/* /etc/cinder
 
     $CRUDINI --set /etc/cinder/cinder.conf database connection $CONNECTION
 
@@ -102,8 +111,11 @@ CONNECTION=mysql://cinder:$CINDER_DBPASS@$CINDER_DB/cinder
     # cinder run_as_root = True
     $CRUDINI --set /etc/cinder/cinder.conf $VOLUME_BACKEND_NAME nas_secure_file_operations false
 
-    echo ${MY_IP}:/volume > /etc/cinder/nfsshares
+    echo ${NFS_SERVER}:/volume > /etc/cinder/nfsshares
     # chown root:cinder /etc/cinder/nfsshares
     # chmod 0640 /etc/cinder/nfsshares
+    
+    touch /etc/cinder/.complete
+fi
 
 /usr/bin/supervisord -n

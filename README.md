@@ -10,6 +10,7 @@
 - MY_IP: my_ip
 - GLANCE_HOST: glance internal endpoint
 - VOLUME_BACKEND_NAME: volume_backend_name
+- NFS_SERVER: nfs server ip address
 
 # volumes:
 - /etc/cinder/: /etc/cinder
@@ -29,13 +30,19 @@ docker run -d --name cinder-volume-nfs \
     -e MY_IP=10.64.0.52 \
     -e GLANCE_HOST=10.64.0.52 \
     -e VOLUME_BACKEND_NAME=one \
+    -e NFS_SERVER=nfs_server_ip
     10.64.0.50:5000/lzh/cinder-volume-nfs:kilo
 ```
 
 # 配置cinder nfs 后端
 ## 在cinder-volume-nfs, nova-compute节点上安装nfs client
+### jessie,trusty
 ```bash
 apt-get install nfs-common
+```
+### centos
+```bash
+yum install nfs-utils
 ```
 
 # 在nfs 节点上安装nfs server
@@ -54,6 +61,7 @@ cat /etc/exports
 # /srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)
 #
 /volume *(rw,sync,insecure,no_all_squash,no_subtree_check,no_root_squash)
+# /volume *(rw,async,insecure,no_all_squash,no_subtree_check,no_root_squash)
 ```
 
 # 使用多后端cinder
