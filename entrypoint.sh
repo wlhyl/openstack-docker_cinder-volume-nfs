@@ -118,4 +118,6 @@ if [ ! -f /etc/cinder/.complete ];then
     touch /etc/cinder/.complete
 fi
 
+chown -R cinder:cinder /var/log/cinder/
+
 /usr/bin/supervisord -n
