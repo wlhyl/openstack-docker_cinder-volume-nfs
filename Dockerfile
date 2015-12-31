@@ -8,7 +8,7 @@ ENV OPENSTACK_VERSION liberty
 ENV BUID_VERSION 2015-12-31
 
 RUN yum update -y && \
-         yum install -y openstack-cinder python-oslo-policy && \
+         yum install -y openstack-cinder python-oslo-policy nfs-utils && \
          rm -rf /var/cache/yum/*
 
 RUN cp -rp /etc/cinder/ /cinder && \
