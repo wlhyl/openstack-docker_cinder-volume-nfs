@@ -1,0 +1,7 @@
+before_script:
+  - docker info
+
+build_image:
+  script:
+    - docker build -t 10.64.0.50:5000/lzh/cinder-volume-nfs:kilo .
+    - docker push 10.64.0.50:5000/lzh/cinder-volume-nfs:kilo
