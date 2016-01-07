@@ -13,12 +13,13 @@
 - NFS_SERVER: nfs server ip address
 
 # volumes:
-- /etc/cinder/: /etc/cinder
+- /opt/openstack/cinder-volume-nfs/: /etc/cinder
 
 # 启动cinder-volume-nfs
 ```bash
 docker run -d --name cinder-volume-nfs \
-    -v /etc/cinder/:/etc/cinder \
+    --privileged \
+    -v /opt/openstack/cinder-volume-nfs:/etc/cinder \
     -e CINDER_DB=10.64.0.52 \
     -e CINDER_DBPASS=cinder_dbpass \
     -e RABBIT_HOST=10.64.0.52 \

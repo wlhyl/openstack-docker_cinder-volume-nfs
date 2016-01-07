@@ -3,9 +3,9 @@ FROM 10.64.0.50:5000/lzh/openstackbase:liberty
 
 MAINTAINER Zuhui Liu penguin_tux@live.com
 
-ENV BASE_VERSION 2015-12-28
+ENV BASE_VERSION 2015-01-07
 ENV OPENSTACK_VERSION liberty
-ENV BUID_VERSION 2015-12-31
+ENV BUID_VERSION 2015-01-07
 
 RUN yum update -y && \
          yum install -y openstack-cinder python-oslo-policy nfs-utils && \
