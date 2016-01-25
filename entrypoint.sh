@@ -101,7 +101,7 @@ CONNECTION=mysql://cinder:$CINDER_DBPASS@$CINDER_DB/cinder
     # cinder run_as_root = True
     $CRUDINI --set /etc/cinder/cinder.conf $VOLUME_BACKEND_NAME nas_secure_file_operations false
 
-    echo ${MY_IP}:/volume > /etc/cinder/nfsshares
+    echo ${MY_IP}:/volume/cinder > /etc/cinder/nfsshares
     # chown root:cinder /etc/cinder/nfsshares
     # chmod 0640 /etc/cinder/nfsshares
 
