@@ -5,7 +5,7 @@ MAINTAINER Zuhui Liu penguin_tux@live.com
 
 ENV BASE_VERSION 2015-01-07
 ENV OPENSTACK_VERSION liberty
-ENV BUID_VERSION 2015-01-07
+ENV BUID_VERSION 2016-02-17
 
 RUN yum update -y && \
          yum install -y openstack-cinder python-oslo-policy nfs-utils && \
